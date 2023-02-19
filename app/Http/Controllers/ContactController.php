@@ -8,6 +8,13 @@ use App\Models\Company;
 
 class ContactController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified']);
+        $this->middleware('auth')->only('create', 'update', 'destroy');
+        $this->middleware('auth')->except('index', 'show');
+    }
+
     public function index(){
         $companies = Company::orderBy('name')->pluck('name', 'id')->prepend('All Companies', '');
         $contacts = Contact::latestFirst()->paginate(10);

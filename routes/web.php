@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,7 @@ use App\Http\Controllers\ContactController;
 Route::get('/', function () {
     return redirect()->route('contacts.index');
 });
-
+Route::middleware('auth')->group(function(){
 Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
 
 Route::get('/contacts/create', [ContactController::class, 'create'])->name('contacts.create');
@@ -28,3 +29,7 @@ Route::put('/contacts/{id}', [ContactController::class, 'update'])->name('contac
 Route::get('/contacts/{id}/edit', [ContactController::class, 'edit'])->name('contacts.edit');
 
 Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
+});
+Auth::routes(['verify' => true]);
+
+Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
